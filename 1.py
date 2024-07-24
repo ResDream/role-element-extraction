@@ -9,11 +9,12 @@ api_secret = "NGQ3ZDFjODc3ODUxMmNmZGY0ODExZGU4"  # 填写控制台中获取的 A
 api_key = "139ed0c8da9d148ecc72bbed3cfa986e"  # 填写控制台中获取的 APIKey 信息
 
 # 调用微调大模型时，设置为“patch”
-domain = "patchv3"
+# domain = "patchv3"
+domain = "patch"
 
 # 云端环境的服务地址
-# Spark_url = "wss://spark-api-n.xf-yun.com/v1.1/chat"  # 微调v1.5环境的地址
-Spark_url = "wss://spark-api-n.xf-yun.com/v3.1/chat"  # 微调v3.0环境的地址
+Spark_url = "wss://spark-api-n.xf-yun.com/v1.1/chat"  # 微调v1.5环境的地址
+# Spark_url = "wss://spark-api-n.xf-yun.com/v3.1/chat"  # 微调v3.0环境的地址
 
 text = []
 
@@ -142,7 +143,7 @@ with open(input_file, 'r', encoding='utf-8') as f:
         }
         results.append(result)
 
-# 将结果写入 output.json 文件
+# 将结果写入 28.37.json 文件
 with open(output_file, 'w', encoding='utf-8') as f:
     json.dump(results, f, ensure_ascii=False, indent=4)
 

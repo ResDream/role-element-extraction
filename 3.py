@@ -95,7 +95,7 @@ few_shot_context = format_few_shot_examples(few_shot_examples)
 
 # Read the input file and process each line
 input_file = 'dataset/my_test.jsonl'
-output_file = 'output.json'
+output_file = '28.37.json'
 
 results = []
 
