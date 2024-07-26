@@ -12,7 +12,9 @@ from urllib.parse import urlencode
 from wsgiref.handlers import format_date_time
 
 import websocket  # 使用websocket_client
+
 answer = ""
+
 
 class Ws_Param(object):
     # 初始化
@@ -63,7 +65,7 @@ def on_error(ws, error):
 
 
 # 收到websocket关闭的处理
-def on_close(ws,one,two):
+def on_close(ws, one, two):
     print(" ")
 
 
@@ -73,7 +75,7 @@ def on_open(ws):
 
 
 def run(ws, *args):
-    data = json.dumps(gen_params(appid=ws.appid, domain= ws.domain,question=ws.question))
+    data = json.dumps(gen_params(appid=ws.appid, domain=ws.domain, question=ws.question))
     ws.send(data)
 
 
@@ -97,7 +99,7 @@ def on_message(ws, message):
             ws.close()
 
 
-def gen_params(appid, domain,question):
+def gen_params(appid, domain, question):
     """
     通过appid和用户的提问来生成请参数
     """
@@ -105,7 +107,7 @@ def gen_params(appid, domain,question):
         "header": {
             "app_id": appid,
             "uid": "1234",
-            "patch_id": ["1809415218102976512"] #调用微调大模型时必传, 否则不传。对应resourceId
+            "patch_id": ["1815999104168153088"]  # 调用微调大模型时必传, 否则不传。对应resourceId
         },
         "parameter": {
             "chat": {
@@ -123,7 +125,7 @@ def gen_params(appid, domain,question):
     return data
 
 
-def main(appid, api_key, api_secret, Spark_url,domain, question):
+def main(appid, api_key, api_secret, Spark_url, domain, question):
     # print("星火:")
     wsParam = Ws_Param(appid, api_key, api_secret, Spark_url)
     websocket.enableTrace(False)
@@ -133,5 +135,3 @@ def main(appid, api_key, api_secret, Spark_url,domain, question):
     ws.question = question
     ws.domain = domain
     ws.run_forever(sslopt={"cert_reqs": ssl.CERT_NONE})
-
-
