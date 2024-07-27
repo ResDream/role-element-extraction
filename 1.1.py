@@ -8,7 +8,6 @@ appid = "9918e391"  # 填写控制台中获取的 APPID 信息
 api_secret = "NGQ3ZDFjODc3ODUxMmNmZGY0ODExZGU4"  # 填写控制台中获取的 APISecret 信息
 api_key = "139ed0c8da9d148ecc72bbed3cfa986e"  # 填写控制台中获取的 APIKey 信息
 
-# 调用微调大模型时，设置为“patch”
 domain = "patchv3"
 # domain = "patch"
 
@@ -46,7 +45,7 @@ def checklen(text):
 
 def core_run(text, prompt):
     # print('prompt',prompt)
-    text.clear
+    text.clear()
     Input = prompt
     question = checklen(getText("user", Input))
     SparkApi.answer = ""
@@ -115,11 +114,9 @@ with open(input_file, 'r', encoding='utf-8') as f:
         data = json.loads(line)
         # 获取 input 字段的内容
         user_input = data['input']
-
         # 调用核心函数获取模型返回值
         text = []
         model_output = core_run(text, user_input)
-        # print(model_output)
         try:
             model_output_json = ast.literal_eval(model_output)
         except:
@@ -130,24 +127,23 @@ with open(input_file, 'r', encoding='utf-8') as f:
         # 确保模型输出是 JSON 并包含所有必需字段
         try:
             if isinstance(model_output_json, list) and len(model_output_json) > 0:
-                model_output_json = ensure_required_keys(model_output_json[0], required_keys)  # 提取列表中的第一个元素并确保其包含所有必需字段
-            model_output_json = ensure_required_keys(model_output_json, required_keys)
+                model_output_json = [ensure_required_keys(item, required_keys) for item in model_output_json]
+            else:
+                model_output_json = ensure_required_keys(model_output_json, required_keys)
         except :
             # 如果模型输出不是有效的 JSON，使用空值填充
             print(index)
             print("ERROR")
             model_output_json = ensure_required_keys({}, required_keys)
 
-        print(model_output_json)
-
         # 将结果存储在列表中
         result = {
-            "infos": [model_output_json],
+            "infos": model_output_json if isinstance(model_output_json, list) else [model_output_json],
             "index": index + 1
         }
+        print(result)
         results.append(result)
 
-# 将结果写入 28.37.json 文件
 with open(output_file, 'w', encoding='utf-8') as f:
     json.dump(results, f, ensure_ascii=False, indent=4)
 

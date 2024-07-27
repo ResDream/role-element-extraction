@@ -124,6 +124,7 @@ with open(input_file, 'r', encoding='utf-8') as f:
             model_output_json = ast.literal_eval(model_output)
         except:
             model_output = core_run(text, model_output+"无法解析，请重新生成，回复不允许出现其他任何无关json的内容")
+            model_output_json = ast.literal_eval(model_output)
         print(model_output_json)
 
         # 确保模型输出是 JSON 并包含所有必需字段
