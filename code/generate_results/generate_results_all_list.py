@@ -100,7 +100,7 @@ def ensure_required_keys(output, required_keys):
 
 
 # 读取 JSONL 文件并处理每一行的输入
-input_file = '../../user_data/my_test.jsonl'
+input_file = '../../user_data/test_processed.jsonl'
 output_file = '../../output.json'
 
 # 存储结果的列表

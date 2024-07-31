@@ -94,7 +94,7 @@ few_shot_examples = load_train_examples(train_file)
 few_shot_context = format_few_shot_examples(few_shot_examples)
 
 # Read the input file and process each line
-input_file = '../../user_data/my_test.jsonl'
+input_file = '../../user_data/test_processed.jsonl'
 output_file = '../../prediction_result/result.json'
 
 results = []
