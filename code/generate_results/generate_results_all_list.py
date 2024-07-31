@@ -1,6 +1,4 @@
 import ast
-import json
-from collections import Counter
 
 import SparkApi
 
@@ -9,13 +7,17 @@ appid = "9918e391"  # 填写控制台中获取的 APPID 信息
 api_secret = "NGQ3ZDFjODc3ODUxMmNmZGY0ODExZGU4"  # 填写控制台中获取的 APISecret 信息
 api_key = "139ed0c8da9d148ecc72bbed3cfa986e"  # 填写控制台中获取的 APIKey 信息
 
-# 调用微调大模型时，设置为“patch”
 domain = "patchv3"
+# domain = "patch"
 
 # 云端环境的服务地址
+# Spark_url = "wss://spark-api-n.xf-yun.com/v1.1/chat"  # 微调v1.5环境的地址
 Spark_url = "wss://spark-api-n.xf-yun.com/v3.1/chat"  # 微调v3.0环境的地址
 
 text = []
+
+
+# length = 0
 
 def getText(role, content):
     jsoncon = {}
@@ -23,6 +25,7 @@ def getText(role, content):
     jsoncon["content"] = content
     text.append(jsoncon)
     return text
+
 
 def getlength(text):
     length = 0
@@ -32,19 +35,30 @@ def getlength(text):
         length += leng
     return length
 
+
 def checklen(text):
     while (getlength(text) > 8000):
         del text[0]
     return text
 
+
 def core_run(text, prompt):
+    # print('prompt',prompt)
     text.clear()
     Input = prompt
     question = checklen(getText("user", Input))
     SparkApi.answer = ""
+    # print("星火:",end = "")
     SparkApi.main(appid, api_key, api_secret, Spark_url, domain, question)
     getText("assistant", SparkApi.answer)
+    # print(text)
     return text[-1]['content']
+
+
+import json
+
+# 你的 core_run 函数和相关的代码需要在这里定义或导入
+# from your_module import core_run
 
 required_keys = {
     "基本信息-姓名": str,
@@ -70,63 +84,69 @@ required_keys = {
     "下一步跟进计划-具体事项": str
 }
 
+
 def ensure_required_keys(output, required_keys):
+    """
+    确保输出包含所有必需字段，并填充默认值。
+    """
     for key, key_type in required_keys.items():
         if key not in output or not isinstance(output[key], key_type):
+            # 根据字段类型填充默认值
             if key_type == str:
                 output[key] = ""
             elif key_type == list:
                 output[key] = []
     return output
 
-def aggregate_results(results_list):
-    aggregated_results = {}
-    for key, key_type in required_keys.items():
-        if key_type == str:
-            value_counts = Counter(result[key] for result in results_list)
-            aggregated_results[key] = value_counts.most_common(1)[0][0] if value_counts else ""
-        elif key_type == list:
-            list_counter = Counter()
-            for result in results_list:
-                list_counter.update(result[key])
-            aggregated_results[key] = [item for item, count in list_counter.most_common()]
-    return aggregated_results
 
-input_file = '../user_data/my_test.jsonl'
-output_file = '../output.json'
+# 读取 JSONL 文件并处理每一行的输入
+input_file = '../../user_data/my_test.jsonl'
+output_file = '../../output.json'
+
+# 存储结果的列表
 results = []
 
+# 读取文件并处理
 with open(input_file, 'r', encoding='utf-8') as f:
     for index, line in enumerate(f):
-        print(index)
+        # 解析每一行的 JSON
         data = json.loads(line)
+        # 获取 input 字段的内容
         user_input = data['input']
-
-        temp_results = []
-        for _ in range(10):
-            text = []
-            model_output = core_run(text, user_input)
+        # 调用核心函数获取模型返回值
+        text = []
+        model_output = core_run(text, user_input)
+        try:
             model_output_json = ast.literal_eval(model_output)
+        except:
+            model_output = core_run(text, model_output+"无法解析，请重新生成，回复不允许出现其他任何无关json的内容")
+            model_output_json = ast.literal_eval(model_output)
+        print(model_output_json)
 
-            try:
-                if isinstance(model_output_json, list) and len(model_output_json) > 0:
-                    model_output_json = ensure_required_keys(model_output_json[0], required_keys)
+        # 确保模型输出是 JSON 并包含所有必需字段
+        try:
+            if isinstance(model_output_json, list) and len(model_output_json) > 0:
+                model_output_json = [ensure_required_keys(item, required_keys) for item in model_output_json]
+            else:
                 model_output_json = ensure_required_keys(model_output_json, required_keys)
-            except:
-                model_output_json = ensure_required_keys({}, required_keys)
+        except :
+            # 如果模型输出不是有效的 JSON，使用空值填充
+            print(index)
+            print("ERROR")
+            model_output_json = ensure_required_keys({}, required_keys)
 
-            temp_results.append(model_output_json)
-
-        final_result = aggregate_results(temp_results)
-        print(final_result)
-
+        # 将结果存储在列表中
         result = {
-            "infos": [final_result],
+            "infos": model_output_json if isinstance(model_output_json, list) else [model_output_json],
             "index": index + 1
         }
+        print(result)
         results.append(result)
 
 with open(output_file, 'w', encoding='utf-8') as f:
     json.dump(results, f, ensure_ascii=False, indent=4)
 
 print(f'Results have been written to {output_file}')
+
+
+
