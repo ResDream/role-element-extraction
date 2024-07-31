@@ -89,13 +89,13 @@ def format_few_shot_examples(examples):
     return formatted_examples
 
 # Read the few-shot examples from train.json
-train_file = 'dataset/train.json'
+train_file = '../user_data/train.json'
 few_shot_examples = load_train_examples(train_file)
 few_shot_context = format_few_shot_examples(few_shot_examples)
 
 # Read the input file and process each line
-input_file = 'dataset/my_test.jsonl'
-output_file = '28.37.json'
+input_file = '../user_data/my_test.jsonl'
+output_file = '../prediction_result/result.json'
 
 results = []
 

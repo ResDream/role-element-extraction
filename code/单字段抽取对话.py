@@ -1,7 +1,6 @@
 import ast
 
 import SparkApi
-import json
 
 # 以下密钥信息从控制台获取
 appid = "53289378"  # 填写控制台中获取的 APPID 信息
@@ -55,8 +54,6 @@ def core_run(text, prompt):
     # print(text)
     return text[-1]['content']
 
-
-import json
 
 # 你的 core_run 函数和相关的代码需要在这里定义或导入
 # from your_module import core_run
@@ -120,11 +117,8 @@ output_file = os.path.join(output_dir, 'output.json')
 # 存储结果的列表
 results = []
 import json
-import json
-from pydantic import BaseModel, ValidationError, validator, EmailStr, constr
-from typing import List, Optional
-from pydantic import BaseModel, ValidationError, validator, EmailStr, constr, Field
-from typing import List, Optional
+from pydantic import BaseModel, ValidationError, constr, Field
+from typing import List
 
 
 class BasicInfoName(BaseModel):

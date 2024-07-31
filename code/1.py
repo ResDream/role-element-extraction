@@ -1,7 +1,6 @@
 import ast
 
 import SparkApi
-import json
 
 # 以下密钥信息从控制台获取
 appid = "9918e391"  # 填写控制台中获取的 APPID 信息
@@ -102,8 +101,8 @@ def ensure_required_keys(output, required_keys):
 
 
 # 读取 JSONL 文件并处理每一行的输入
-input_file = 'dataset/my_test.jsonl'
-output_file = 'output.json'
+input_file = '../user_data/my_test.jsonl'
+output_file = '../output.json'
 
 # 存储结果的列表
 results = []
@@ -147,7 +146,7 @@ with open(input_file, 'r', encoding='utf-8') as f:
         }
         results.append(result)
 
-# 将结果写入 28.37.json 文件
+# 将结果写入 result.json 文件
 with open(output_file, 'w', encoding='utf-8') as f:
     json.dump(results, f, ensure_ascii=False, indent=4)
 

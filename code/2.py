@@ -92,8 +92,8 @@ def aggregate_results(results_list):
             aggregated_results[key] = [item for item, count in list_counter.most_common()]
     return aggregated_results
 
-input_file = 'dataset/my_test.jsonl'
-output_file = 'output.json'
+input_file = '../user_data/my_test.jsonl'
+output_file = '../output.json'
 results = []
 
 with open(input_file, 'r', encoding='utf-8') as f:
