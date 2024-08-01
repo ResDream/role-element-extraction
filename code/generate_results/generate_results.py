@@ -1,13 +1,11 @@
 import ast
-
 import SparkApi
 
-# 以下密钥信息从控制台获取
-appid = "9918e391"  # 填写控制台中获取的 APPID 信息
-api_secret = "NGQ3ZDFjODc3ODUxMmNmZGY0ODExZGU4"  # 填写控制台中获取的 APISecret 信息
-api_key = "139ed0c8da9d148ecc72bbed3cfa986e"  # 填写控制台中获取的 APIKey 信息
 
-# 调用微调大模型时，设置为“patch”
+appid = "9918e391"
+api_secret = "NGQ3ZDFjODc3ODUxMmNmZGY0ODExZGU4"
+api_key = "139ed0c8da9d148ecc72bbed3cfa986e"
+
 domain = "patchv3"
 # domain = "patch"
 
@@ -102,7 +100,7 @@ def ensure_required_keys(output, required_keys):
 
 # 读取 JSONL 文件并处理每一行的输入
 input_file = '../../user_data/test_processed.jsonl'
-output_file = '../../output.json'
+output_file = '../../prediction_result/result.json'
 
 # 存储结果的列表
 results = []

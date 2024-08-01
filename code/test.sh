@@ -1,0 +1,2 @@
+cd generate_results
+python generate_results.py

@@ -93,7 +93,7 @@ def aggregate_results(results_list):
     return aggregated_results
 
 input_file = '../../user_data/test_processed.jsonl'
-output_file = '../../output.json'
+output_file = '../../prediction_result/result.json'
 results = []
 
 with open(input_file, 'r', encoding='utf-8') as f:
