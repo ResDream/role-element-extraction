@@ -107,7 +107,7 @@ def gen_params(appid, domain, question):
         "header": {
             "app_id": appid,
             "uid": "1234",
-            "patch_id": ["1815999104168153088"]  # 调用微调大模型时必传, 否则不传。对应resourceId
+            "patch_id": [""]  # 调用微调大模型时必传, 否则不传。对应resourceId
         },
         "parameter": {
             "chat": {

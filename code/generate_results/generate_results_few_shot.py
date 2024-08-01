@@ -29,9 +29,9 @@ required_keys = {
 }
 
 # Spark API credentials
-appid = "9918e391"
-api_secret = "NGQ3ZDFjODc3ODUxMmNmZGY0ODExZGU4"
-api_key = "139ed0c8da9d148ecc72bbed3cfa986e"
+appid = ""
+api_secret = ""
+api_key = ""
 domain = "patchv3"
 Spark_url = "wss://spark-api-n.xf-yun.com/v3.1/chat"
 
